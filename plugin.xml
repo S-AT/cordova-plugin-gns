@@ -5,7 +5,7 @@
 
   <name>cordova-plugin-google-nearby</name>
   <preference name="API_KEY" />
-    
+
   <engines>
     <engine name="cordova" version=">=3.4.0"/>
   </engines>
@@ -18,20 +18,19 @@
 
   <platform name="android">
     <framework src="com.google.android.gms:play-services-nearby:17.0.0" />
-
-    <config-file target="res/xml/config.xml" parent="/*">
+    <config-file target="app/src/main/res/xml/config.xml" parent="/*">
       <feature name="NearbyPlugin">
         <param name="android-package" value="org.apache.cordova.NearbyPlugin"/>
       </feature>
     </config-file>
     
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application">
       <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="$API_KEY" />
     </config-file>
 
-    <config-file target="AndroidManifest.xml" parent="/manifest">
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest">
         <uses-permission android:name="android.permission.INTERNET" />
         <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
         <uses-permission android:name="android.permission.BLUETOOTH" />

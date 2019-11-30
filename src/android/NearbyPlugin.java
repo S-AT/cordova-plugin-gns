@@ -11,7 +11,6 @@ import android.net.Uri;
 import com.google.android.gms.nearby.Nearby;
 
 import com.google.android.gms.nearby.messages.Message;
-import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.Messages;
 import com.google.android.gms.nearby.messages.PublishOptions;
@@ -22,12 +21,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 
 public class NearbyPlugin extends CordovaPlugin {
     private static final String TAG = "NearbyPlugin";
-    private static CallbackContext publish_callback = null;
-	private static CallbackContext unpublish_callback = null;
-    private static CallbackContext subscribe_callback = null;
-    private static CallbackContext unsubscribe_callback = null;
-	private static Message published_message = null;
+    private static CallbackContext publish_callback;
+    private static CallbackContext subscribe_callback;
+    private static CallbackContext unsubscribe_callback;
+    private static CallbackContext unpublish_callback;
     private static final int REQUEST_RESOLVE_ERROR = 1001;
+
+    private static Message mActiveMessage = null;
+
     MessageListener mMessageListener = new MessageListener() {
         @Override
         public void onFound(Message message) {
@@ -35,9 +36,7 @@ public class NearbyPlugin extends CordovaPlugin {
             Log.d(TAG, "found messsage: " + found_message);
             PluginResult result = new PluginResult(PluginResult.Status.OK, found_message);
             result.setKeepCallback(true);
-
-			if(NearbyPlugin.this.subscribe_callback != null)
-				NearbyPlugin.this.subscribe_callback.sendPluginResult(result);
+            NearbyPlugin.this.subscribe_callback.sendPluginResult(result);
         }
 
         @Override
@@ -80,81 +79,45 @@ public class NearbyPlugin extends CordovaPlugin {
 
     // Subscribe to receive messages.
     private void subscribe() {
-
-		unsubscribe();
-
         SubscribeCallback callback = new SubscribeCallback() {
             @Override
             public void onExpired() {
                 Log.d(TAG, "subscribtion expired");
             }
         };
-
-		Strategy strategy = new Strategy.Builder()
-			.setDiscoveryMode(Strategy.DISCOVERY_MODE_DEFAULT)
-			.setDistanceType(Strategy.DISTANCE_TYPE_DEFAULT)
-			.setTtlSeconds(Strategy.TTL_SECONDS_INFINITE)
-			.build();
-
-        SubscribeOptions options = new SubscribeOptions.Builder()
-			.setCallback(callback)
-			.setStrategy(strategy)
-			.build();
-
+        SubscribeOptions options = new SubscribeOptions.Builder().setCallback(callback).build();
         Nearby.getMessagesClient(cordova.getActivity()).subscribe(NearbyPlugin.this.mMessageListener, options).addOnFailureListener(this.failListener);
         Log.d(TAG, "subscribed successfully");
+
     }
 
     private void publish(String message) {
-
-		unpublish();
-
         PublishCallback callback = new PublishCallback() {
             @Override
             public void onExpired() {
                 Log.d(TAG, "publish expired");
             }
         };        
-
-		Strategy strategy = new Strategy.Builder()
-			.setDiscoveryMode(Strategy.DISCOVERY_MODE_DEFAULT)
-			.setDistanceType(Strategy.DISTANCE_TYPE_DEFAULT)
-			.setTtlSeconds(300) // Strategy.TTL_SECONDS_MAX)
-			.build();
-
-        PublishOptions options = new PublishOptions.Builder()
-			.setCallback(callback)
-			.setStrategy(strategy)
-			.build();
-
-        Message mActiveMessage = new Message(message.getBytes());
-        Nearby.getMessagesClient(cordova.getActivity()).publish(mActiveMessage, options).addOnFailureListener(this.failListener);
+        PublishOptions options = new PublishOptions.Builder().setCallback(callback).build();
+        this.mActiveMessage = new Message(message.getBytes());
+        Nearby.getMessagesClient(cordova.getActivity()).publish(this.mActiveMessage, options).addOnFailureListener(this.failListener);
         Log.d(TAG, "published message: " + message);
-		this.published_message = mActiveMessage;
-
-		if(this.publish_callback != null)
-			this.publish_callback.success("published message");
+        this.publish_callback.success("published message");
     }
 
     private void unsubscribe() {
         Nearby.getMessagesClient(cordova.getActivity()).unsubscribe(this.mMessageListener);
         Log.d(TAG, "unsubscribed");
-
-		if(this.unsubscribe_callback != null)
-			this.unsubscribe_callback.success("unsubscribed");
+        this.unsubscribe_callback.success("unsubscribed");
     }
-
     private void unpublish() {
-		Message msg = this.published_message;
-		
-		if(msg == null) {
-			Log.d(TAG, "no message to unpublish");
-		} else {
-			Nearby.getMessagesClient(cordova.getActivity()).unpublish(this.published_message);
-			Log.d(TAG, "unpublished");
-		}
-
-		if(this.unpublish_callback != null)
-			this.unpublish_callback.success("unpublished");
+        if (this.mActiveMessage != null) {
+            Nearby.getMessagesClient(cordova.getActivity()).unpublish(this.mActiveMessage);
+            Log.d(TAG, "unpublished");
+            this.unpublish_callback.success("unpublished message");
+            this.mActiveMessage = null;
+        } else {
+            this.unpublish_callback.success("nothing to unpublish");
+        }
     }
 }
