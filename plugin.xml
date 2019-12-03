@@ -51,40 +51,15 @@
       </config-file>
       <header-file src="src/ios/CDVNearbyPlugin.h" />
       <source-file src="src/ios/CDVNearbyPlugin.m" />
-      <framework src="src/ios/GoogleInterchangeUtilities.framework" custom="true" />
-      <framework src="src/ios/GoogleNetworkingUtilities.framework" custom="true" />
-      <framework src="src/ios/GoogleSymbolUtilities.framework" custom="true" />
-      <framework src="src/ios/GoogleUtilities.framework" custom="true" />
 
-      <resource-file src="src/ios/NearbyMessages/Resources/resources/GNSSharedResources.bundle" />
-      <resource-file src="src/ios/NearbyMessages/Resources/resources/ic_expand_more.xcassets" />
-      <resource-file src="src/ios/NearbyMessages/Resources/resources/ic_nearby_48pt.xcassets" />
-
-      <source-file src="src/ios/NearbyMessages/Libraries/libGNSMessages.a" framework="true" />
-
-      <header-file src="src/ios/NearbyMessages/Sources/GNSBeaconStrategy.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSError.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSMessage.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSMessageManager.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSMessages.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSOperationStatus.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSPermission.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSPublicationParams.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSStrategy.h" />
-      <header-file src="src/ios/NearbyMessages/Sources/GNSSubscriptionParams.h" />
-
-      <framework src="Accelerate.framework" />
-      <framework src="AddressBook.framework" />
-      <framework src="AudioToolbox.framework" />
-      <framework src="AVFoundation.framework" />
-      <framework src="CoreBluetooth.framework" />
-      <framework src="CoreGraphics.framework" />
-      <framework src="CoreLocation.framework" />
-      <framework src="CoreMedia.framework" />
-      <framework src="CoreText.framework" />
-      <framework src="MediaPlayer.framework" />
-      <framework src="libc++.tbd" />
-      <framework src="libz.tbd" />
+      <podspec>
+        <config>
+          <source url="https://github.com/S-AT/Specs.git" />
+        </config>
+        <pods use-frameworks="true">
+          <pod name="NearbyMessages" spec="~> 1.1.1" />
+        </pods>
+      </podspec>
       
       <config-file target="*-Info.plist" parent="NearbyApiKey">
           <string>$API_KEY</string>
