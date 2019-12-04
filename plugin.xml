@@ -54,12 +54,9 @@
 
       <podspec>
         <config>
-          <!-- source url="https://github.com/S-AT/Specs.git" / -->
           <source url="https://github.com/CocoaPods/Specs.git"/>
         </config>
-        <pods use-frameworks="true">
-          <!-- pod name="NearbyMessages" spec="~> 1.1.1" / -->
-        </pods>
+        <pods use-frameworks="true"/>
       </podspec>
 
       <framework src="NearbyMessages" type="podspec" spec="~> 1.1.1" />
