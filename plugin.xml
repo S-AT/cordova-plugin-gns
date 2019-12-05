@@ -54,14 +54,16 @@
 
       <podspec>
         <config>
-          <source url="https://github.com/S-AT/Specs.git" />
+          <source url="https://github.com/CocoaPods/Specs.git"/>
         </config>
         <pods use-frameworks="true">
-          <!--pod name="NearbyMessages" spec="~> 1.1.1" / -->
+          <pod name="GoogleSymbolUtilities" spec="~> 1.1.2" />
+          <pod name="GoogleUtilitiesLegacy" spec="~> 1.3.2" />
+          <pod name="GoogleNetworkingUtilities" spec="~> 1.2.2" />
+          <pod name="GoogleInterchangeUtilities" spec="~> 1.2.2" />
+          <pod name="NearbyMessages" spec="~> 1.1.1" />
         </pods>
       </podspec>
-
-      <framework src="NearbyMessages" type="podspec" spec="~> 1.1.1" />
       
       <config-file target="*-Info.plist" parent="NearbyApiKey">
           <string>$API_KEY</string>
