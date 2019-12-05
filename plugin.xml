@@ -57,9 +57,11 @@
           <source url="https://github.com/S-AT/Specs.git" />
         </config>
         <pods use-frameworks="true">
-          <pod name="NearbyMessages" spec="~> 1.1.1" />
+          <!--pod name="NearbyMessages" spec="~> 1.1.1" / -->
         </pods>
       </podspec>
+
+      <framework src="NearbyMessages" type="podspec" spec="~> 1.1.1" />
       
       <config-file target="*-Info.plist" parent="NearbyApiKey">
           <string>$API_KEY</string>
