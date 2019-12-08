@@ -52,10 +52,6 @@
       <header-file src="src/ios/CDVNearbyPlugin.h" />
       <source-file src="src/ios/CDVNearbyPlugin.m" />
 
-      <resource-file src="src/ios/resources/GNSSharedResources.bundle" />
-      <resource-file src="src/ios/resources/ic_expand_more.xcassets" />
-      <resource-file src="src/ios/resources/ic_nearby_48pt.xcassets" />
-
       <podspec>
         <config>
           <source url="https://github.com/S-AT/Specs.git" />
